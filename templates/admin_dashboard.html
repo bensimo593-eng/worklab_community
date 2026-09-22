@@ -1,0 +1,257 @@
+{% extends "admin_layout.html" %}
+{% block title %}Dashboard | WORKLAB{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <p class="admin-eyebrow">WORKLAB OVERVIEW</p>
+        <h1>Dashboard</h1>
+        <p>{{ start_date }} → {{ end_date }}</p>
+    </div>
+
+    <div class="period-filter">
+        <a class="{{ 'active' if period=='today' }}"
+           href="?period=today&profit_mode={{ profit_mode }}&profit_year={{ profit_year }}&profit_month={{ profit_month }}">Today</a>
+        <a class="{{ 'active' if period=='7days' }}"
+           href="?period=7days&profit_mode={{ profit_mode }}&profit_year={{ profit_year }}&profit_month={{ profit_month }}">7 Days</a>
+        <a class="{{ 'active' if period=='month' }}"
+           href="?period=month&profit_mode={{ profit_mode }}&profit_year={{ profit_year }}&profit_month={{ profit_month }}">This Month</a>
+        <a class="{{ 'active' if period=='year' }}"
+           href="?period=year&profit_mode={{ profit_mode }}&profit_year={{ profit_year }}&profit_month={{ profit_month }}">This Year</a>
+        <a class="{{ 'active' if period=='custom' }}"
+           href="?period=custom&start={{ start_date }}&end={{ end_date }}&profit_mode={{ profit_mode }}&profit_year={{ profit_year }}&profit_month={{ profit_month }}">Custom</a>
+    </div>
+</div>
+
+<form class="custom-period" method="GET">
+    <input type="hidden" name="period" value="custom">
+    <input type="hidden" name="profit_mode" value="{{ profit_mode }}">
+    <input type="hidden" name="profit_year" value="{{ profit_year }}">
+    <input type="hidden" name="profit_month" value="{{ profit_month }}">
+    <input type="date" name="start" value="{{ start_date }}">
+    <span>to</span>
+    <input type="date" name="end" value="{{ end_date }}">
+    <button class="admin-button admin-button-primary">Apply</button>
+</form>
+
+<div class="admin-section-title">
+    <div>
+        <p class="admin-eyebrow">OPERATIONS</p>
+        <h2>Community Activity</h2>
+    </div>
+</div>
+
+<div class="kpi-grid kpi-grid-four">
+    <div class="kpi-card">
+        <span class="kpi-label">New Clients</span>
+        <strong class="kpi-value">{{ total_clients }}</strong>
+        <span class="kpi-note">Registered in selected period</span>
+    </div>
+    <div class="kpi-card">
+        <span class="kpi-label">Visits</span>
+        <strong class="kpi-value">{{ visits }}</strong>
+        <span class="kpi-note">Check-ins in selected period</span>
+    </div>
+    <div class="kpi-card">
+        <span class="kpi-label">Active Subscriptions</span>
+        <strong class="kpi-value">{{ active_subscriptions }}</strong>
+        <span class="kpi-note">Current active memberships</span>
+    </div>
+    <div class="kpi-card kpi-alert">
+        <span class="kpi-label">Ending Soon</span>
+        <strong class="kpi-value">{{ expiring_soon|length }}</strong>
+        <span class="kpi-note">Ending within next 3 days</span>
+    </div>
+</div>
+
+{% if finance_allowed %}
+<div class="admin-section-title admin-finance-title">
+    <div>
+        <p class="admin-eyebrow">PRIVATE FINANCE</p>
+        <h2>Financial Overview</h2>
+    </div>
+    <span>{{ start_date }} → {{ end_date }}</span>
+</div>
+
+<div class="kpi-grid finance-period-grid">
+    <div class="kpi-card kpi-finance">
+        <span class="kpi-label">Revenue</span>
+        <strong class="kpi-value">{{ "%.2f"|format(revenue) }} DH</strong>
+        <span class="kpi-note">Selected dashboard period</span>
+    </div>
+    <div class="kpi-card kpi-finance">
+        <span class="kpi-label">Expenses</span>
+        <strong class="kpi-value">{{ "%.2f"|format(expenses) }} DH</strong>
+        <span class="kpi-note">Selected dashboard period</span>
+    </div>
+</div>
+
+<div class="finance-mini-grid">
+    <div>
+        <span>Visit Revenue</span>
+        <strong>{{ "%.2f"|format(visit_revenue) }} DH</strong>
+    </div>
+    <div>
+        <span>Subscription Revenue</span>
+        <strong>{{ "%.2f"|format(subscription_revenue) }} DH</strong>
+    </div>
+    <div>
+        <span>Subscriptions Sold / Renewed</span>
+        <strong>{{ subscriptions_started }}</strong>
+    </div>
+    <div>
+        <span>Additional Services Revenue</span>
+        <strong>{{ "%.2f"|format(additional_services_revenue) }} DH</strong>
+    </div>
+</div>
+
+<section class="profitability-section">
+    <div class="profitability-heading">
+        <div>
+            <p class="admin-eyebrow">PROFITABILITY</p>
+            <h2>Net Profit</h2>
+            <p>Net Profit uses its own complete month or year period.</p>
+        </div>
+
+        <form class="profit-period-form" method="GET">
+            <input type="hidden" name="period" value="{{ period }}">
+            {% if period == 'custom' %}
+                <input type="hidden" name="start" value="{{ start_date }}">
+                <input type="hidden" name="end" value="{{ end_date }}">
+            {% endif %}
+
+            <label>
+                View
+                <select name="profit_mode" id="profitMode">
+                    <option value="month" {{ 'selected' if profit_mode=='month' }}>Monthly</option>
+                    <option value="year" {{ 'selected' if profit_mode=='year' }}>Yearly</option>
+                </select>
+            </label>
+
+            <label id="profitMonthWrap">
+                Month
+                <select name="profit_month">
+                    {% for m in range(1, 13) %}
+                    <option value="{{ m }}" {{ 'selected' if profit_month==m }}>
+                        {{ "%02d"|format(m) }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label>
+                Year
+                <select name="profit_year">
+                    {% for y in available_years %}
+                    <option value="{{ y }}" {{ 'selected' if profit_year==y }}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <button class="admin-button admin-button-primary">Apply Profit Period</button>
+        </form>
+    </div>
+
+    <div class="profit-card">
+        <div class="profit-card-main">
+            <span class="kpi-label">NET PROFIT — {{ profit_label|upper }}</span>
+            <strong class="profit-value {{ 'profit-negative' if net_profit < 0 else 'profit-positive' }}">
+                {{ "%.2f"|format(net_profit) }} DH
+            </strong>
+            <span class="kpi-note">{{ profit_start }} → {{ profit_end }}</span>
+        </div>
+
+        <div class="profit-breakdown">
+            <div>
+                <span>Revenue</span>
+                <strong>{{ "%.2f"|format(profit_revenue) }} DH</strong>
+            </div>
+            <div>
+                <span>Expenses</span>
+                <strong>− {{ "%.2f"|format(profit_expenses) }} DH</strong>
+            </div>
+            <div class="profit-breakdown-total">
+                <span>Net Profit</span>
+                <strong>{{ "%.2f"|format(net_profit) }} DH</strong>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<div class="admin-grid-2 dashboard-bottom">
+    <section class="admin-panel">
+        <div class="panel-heading">
+            <div>
+                <p class="admin-eyebrow">REMINDERS</p>
+                <h2>Subscriptions Ending Soon</h2>
+            </div>
+            <a href="{{ url_for('admin_subscriptions', status='Ending Soon', period='year') }}">View subscriptions</a>
+        </div>
+
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr><th>Client</th><th>Phone</th><th>Type</th><th>Ends</th></tr>
+                </thead>
+                <tbody>
+                {% for s in expiring_soon %}
+                    <tr>
+                        <td><strong>{{ s['full_name'] }}</strong><br><small>{{ s['client_id'] }}</small></td>
+                        <td>{{ s['phone'] }}</td>
+                        <td>{{ s['subscription_type'] }}</td>
+                        <td><span class="status-badge status-soon">{{ s['end_date'][:10] }}</span></td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4" class="empty-cell">No subscriptions ending in the next 3 days.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="admin-panel">
+        <div class="panel-heading">
+            <div>
+                <p class="admin-eyebrow">ACTIVITY</p>
+                <h2>Recent Check-ins</h2>
+            </div>
+            <a href="{{ url_for('admin_visits') }}">View visits</a>
+        </div>
+
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr><th>Client</th><th>Plan</th><th>Date</th></tr>
+                </thead>
+                <tbody>
+                {% for v in recent_checkins %}
+                    <tr>
+                        <td><strong>{{ v['full_name'] }}</strong><br><small>{{ v['client_id'] }}</small></td>
+                        <td>{{ v['plan'] }}</td>
+                        <td>{{ v['visit_date'][:16] }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="3" class="empty-cell">No visits yet.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+<script>
+(function () {
+    const mode = document.getElementById("profitMode");
+    const monthWrap = document.getElementById("profitMonthWrap");
+    if (!mode || !monthWrap) return;
+
+    function syncProfitControls() {
+        monthWrap.style.display = mode.value === "month" ? "grid" : "none";
+    }
+
+    mode.addEventListener("change", syncProfitControls);
+    syncProfitControls();
+})();
+</script>
+{% endblock %}

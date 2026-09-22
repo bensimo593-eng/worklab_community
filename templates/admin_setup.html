@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Create WORKLAB Admin</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body class="admin-login-body"><div class="admin-login-card">
+<img class="admin-login-logo" src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}" alt="WORKLAB">
+<h1>Create First Admin</h1><p>This page works only while no WORKLAB user exists.</p>
+{% if error %}<div class="register-error">{{ error }}</div>{% endif %}
+<form method="POST" class="admin-form">
+<label>Full Name<input type="text" name="full_name" required></label>
+<label>Username<input type="text" name="username" required></label>
+<label>Password<input type="password" name="password" minlength="6" required></label>
+<button class="admin-button admin-button-primary" type="submit">Create Admin Account</button>
+</form></div></body></html>

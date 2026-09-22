@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Complete Check-In | WORKLAB</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body class="member-checkin-body">
+
+<section class="member-checkin-page">
+
+    <!-- TOP NAVIGATION -->
+
+    <header class="member-checkin-header">
+
+        <a href="/" class="member-header-logo">
+
+            <img
+                src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}"
+                alt="WORKLAB"
+            >
+
+        </a>
+
+        <div class="member-header-title">
+            MEMBER CHECK-IN
+        </div>
+
+        <a href="/checkin" class="member-change-client">
+            ← Change Client
+        </a>
+
+    </header>
+
+
+    <main class="member-checkin-container">
+
+
+        <!-- CLIENT INTRO -->
+
+        <section class="member-welcome">
+
+            <p class="member-eyebrow">
+                WELCOME BACK
+            </p>
+
+            <h1>
+                {{ client.full_name }}
+            </h1>
+
+            <div class="member-identifiers">
+
+                <span class="member-id-badge">
+                    {{ client.client_id }}
+                </span>
+
+                <span class="member-status-badge">
+                    {% if client.status == "Normal" %}
+                        NON-STUDENT
+                    {% else %}
+                        {{ client.status|upper }}
+                    {% endif %}
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- SUBSCRIPTION STATUS -->
+
+        {% if subscription_status == "active" %}
+
+        <section class="subscription-status-card active-subscription">
+
+            <div class="subscription-status-icon">
+                ✓
+            </div>
+
+            <div class="subscription-status-information">
+
+                <span class="subscription-status-label">
+                    ACTIVE SUBSCRIPTION
+                </span>
+
+                <h3>
+                    {{ subscription.subscription_type }}
+                </h3>
+
+                <p>
+                    Valid until
+                    <strong>{{ subscription.end_date }}</strong>
+                </p>
+
+            </div>
+
+            <div class="subscription-active-badge">
+                ACTIVE
+            </div>
+
+        </section>
+
+
+        {% elif subscription_status == "expired" %}
+
+        <section class="subscription-status-card expired-subscription">
+
+            <div class="subscription-status-icon">
+                !
+            </div>
+
+            <div class="subscription-status-information">
+
+                <span class="subscription-status-label">
+                    SUBSCRIPTION EXPIRED
+                </span>
+
+                <h3>
+                    {{ subscription.subscription_type }}
+                </h3>
+
+                <p>
+                    Your subscription ended on
+                    <strong>{{ subscription.end_date }}</strong>.
+                    You can renew it below or continue without a subscription.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        {% else %}
+
+        <section class="subscription-status-card no-subscription">
+
+            <div class="subscription-status-icon">
+                i
+            </div>
+
+            <div class="subscription-status-information">
+
+                <span class="subscription-status-label">
+                    NO ACTIVE SUBSCRIPTION
+                </span>
+
+                <h3>
+                    Pay per visit or become a member
+                </h3>
+
+                <p>
+                    Choose how you would like to continue today.
+                </p>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- FORM -->
+
+        <form
+            method="POST"
+            action="/process-checkin"
+            class="member-plan-form"
+        >
+
+            <input
+                type="hidden"
+                name="client_id"
+                value="{{ client.client_id }}"
+            >
+
+
+            {% if subscription_status == "active" %}
+
+            <input
+                type="hidden"
+                name="subscription_choice"
+                value="Active"
+            >
+
+
+            <!-- ACTIVE MEMBER: ONLY VISIT PLAN -->
+
+            <section class="member-form-section">
+
+                <div class="member-section-heading">
+
+                    <div>
+                        <span class="member-section-number">
+                            01
+                        </span>
+
+                        <h2>
+                            Choose Today's Plan
+                        </h2>
+                    </div>
+
+                    <span>
+                        REQUIRED
+                    </span>
+
+                </div>
+
+
+                <div class="visit-plan-grid">
+
+                    <label class="visit-plan-card">
+
+                        <input
+                            type="radio"
+                            name="plan"
+                            value="Half Day"
+                            required
+                        >
+
+                        <div class="visit-plan-content">
+
+                            <div>
+
+                                <span class="visit-plan-name">
+                                    Half Day
+                                </span>
+
+                                <small>
+                                    Flexible workspace access
+                                </small>
+
+                            </div>
+
+                            <strong>
+                                {{ subscriber_half }}
+                                <small>DH</small>
+                            </strong>
+
+                        </div>
+
+                    </label>
+
+
+                    <label class="visit-plan-card">
+
+                        <input
+                            type="radio"
+                            name="plan"
+                            value="Full Day"
+                            required
+                        >
+
+                        <div class="visit-plan-content">
+
+                            <div>
+
+                                <span class="visit-plan-name">
+                                    Full Day
+                                </span>
+
+                                <small>
+                                    Full-day workspace access
+                                </small>
+
+                            </div>
+
+                            <strong>
+                                {{ subscriber_full }}
+                                <small>DH</small>
+                            </strong>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+
+            {% else %}
+
+
+            <!-- SUBSCRIPTION CHOICE -->
+
+            <section class="member-form-section">
+
+                <div class="member-section-heading">
+
+                    <div>
+                        <span class="member-section-number">
+                            01
+                        </span>
+
+                        <h2>
+                            How Would You Like to Continue?
+                        </h2>
+                    </div>
+
+                    <span>
+                        REQUIRED
+                    </span>
+
+                </div>
+
+
+                <div class="membership-choice-list">
+
+
+                    <!-- NONE -->
+
+                    <label class="membership-option">
+
+                        <input
+                            type="radio"
+                            name="subscription_choice"
+                            value="None"
+                            required
+                        >
+
+                        <div class="membership-option-content">
+
+                            <div class="membership-radio-design"></div>
+
+                            <div class="membership-option-info">
+
+                                <strong>
+                                    Continue Without Subscription
+                                </strong>
+
+                                <small>
+                                    Pay the standard visit price today
+                                </small>
+
+                            </div>
+
+                            <div class="membership-pricing">
+
+                                <span>
+                                    Half Day
+                                    <strong>{{ normal_half }} DH</strong>
+                                </span>
+
+                                <span>
+                                    Full Day
+                                    <strong>{{ normal_full }} DH</strong>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+
+                    <!-- WEEKLY -->
+
+                    <label class="membership-option">
+
+                        <input
+                            type="radio"
+                            name="subscription_choice"
+                            value="Weekly"
+                            required
+                        >
+
+                        <div class="membership-option-content">
+
+                            <div class="membership-radio-design"></div>
+
+                            <div class="membership-option-info">
+
+                                <strong>
+                                    Weekly Membership
+                                </strong>
+
+                                <small>
+                                    7 days of reduced visit prices
+                                </small>
+
+                            </div>
+
+                            <div class="membership-price-main">
+                                50
+                                <small>DH</small>
+                            </div>
+
+                        </div>
+
+                    </label>
+
+
+                    <!-- MONTHLY -->
+
+                    <label class="membership-option">
+
+                        <input
+                            type="radio"
+                            name="subscription_choice"
+                            value="Monthly"
+                            required
+                        >
+
+                        <div class="membership-option-content">
+
+                            <div class="membership-radio-design"></div>
+
+                            <div class="membership-option-info">
+
+                                <strong>
+                                    Monthly Membership
+                                </strong>
+
+                                <small>
+                                    One month of reduced visit prices
+                                </small>
+
+                            </div>
+
+                            <div class="membership-price-main">
+                                200
+                                <small>DH</small>
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+
+                <div class="member-discount-note">
+
+                    <strong>
+                        Member visit prices:
+                    </strong>
+
+                    Half Day {{ subscriber_half }} DH
+
+                    <span>•</span>
+
+                    Full Day {{ subscriber_full }} DH
+
+                </div>
+
+            </section>
+
+
+            <!-- VISIT PLAN -->
+
+            <section class="member-form-section">
+
+                <div class="member-section-heading">
+
+                    <div>
+
+                        <span class="member-section-number">
+                            02
+                        </span>
+
+                        <h2>
+                            Choose Today's Plan
+                        </h2>
+
+                    </div>
+
+                    <span>
+                        REQUIRED
+                    </span>
+
+                </div>
+
+
+                <div class="visit-plan-grid">
+
+                    <label class="visit-plan-card">
+
+                        <input
+                            type="radio"
+                            name="plan"
+                            value="Half Day"
+                            required
+                        >
+
+                        <div class="visit-plan-content">
+
+                            <div>
+
+                                <span class="visit-plan-name">
+                                    Half Day
+                                </span>
+
+                                <small>
+                                    Flexible workspace access
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+
+                    <label class="visit-plan-card">
+
+                        <input
+                            type="radio"
+                            name="plan"
+                            value="Full Day"
+                            required
+                        >
+
+                        <div class="visit-plan-content">
+
+                            <div>
+
+                                <span class="visit-plan-name">
+                                    Full Day
+                                </span>
+
+                                <small>
+                                    Full-day workspace access
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+            {% endif %}
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="member-confirm-button"
+            >
+
+                <span>
+                    Confirm Check-In
+                </span>
+
+                <span class="member-confirm-arrow">
+                    →
+                </span>
+
+            </button>
+
+        </form>
+
+
+        <div class="member-bottom-link">
+
+            <a href="/checkin">
+                ← Search Another Client
+            </a>
+
+        </div>
+
+    </main>
+
+</section>
+
+</body>
+</html>

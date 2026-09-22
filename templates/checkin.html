@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Member Check-In | WORKLAB</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body class="checkin-body">
+
+<section class="checkin-page">
+
+    <!-- LEFT SIDE -->
+    <div class="checkin-brand-panel">
+
+        <div class="checkin-brand-overlay"></div>
+
+        <div class="checkin-brand-content">
+
+            <a href="/" class="checkin-logo-link">
+                <img
+                    src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}"
+                    alt="WORKLAB"
+                    class="checkin-logo"
+                >
+            </a>
+
+            <div class="checkin-brand-message">
+
+                <p class="checkin-brand-label">
+                    WORKLAB COMMUNITY
+                </p>
+
+                <h1>
+                    Welcome<br>
+                    <span>Back.</span>
+                </h1>
+
+                <div class="checkin-gold-line"></div>
+
+                <p>
+                    Your workspace is waiting.
+                    Enter your Client ID to start today's visit.
+                </p>
+
+            </div>
+
+            <div class="checkin-brand-footer">
+                <span></span>
+                A Space for Bright Minds
+                <span></span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT SIDE -->
+    <div class="checkin-content-panel">
+
+        <div class="checkin-content">
+
+            <div class="checkin-topbar">
+
+                <a href="/" class="checkin-back">
+                    ← Back to Home
+                </a>
+
+                <span class="checkin-page-label">
+                    MEMBER CHECK-IN
+                </span>
+
+            </div>
+
+
+            <!-- PROFESSIONAL USER ICON -->
+            <div class="checkin-user-icon">
+
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5Zm0 2c-4.42 0-8 2.24-8 5v2h16v-2c0-2.76-3.58-5-8-5Z"
+                    />
+                </svg>
+
+            </div>
+
+
+            <div class="checkin-heading">
+
+                <p class="checkin-eyebrow">
+                    EXISTING CLIENT
+                </p>
+
+                <h2>
+                    Find Your Profile
+                </h2>
+
+                <p>
+                    Enter your WORKLAB Client ID to continue
+                    with today's check-in.
+                </p>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="checkin-alert checkin-alert-error">
+
+                <div class="checkin-alert-symbol">
+                    !
+                </div>
+
+                <div>
+                    <strong>Unable to continue</strong>
+                    <p>{{ error }}</p>
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                action="/checkin"
+                id="checkinForm"
+                class="checkin-search-form"
+            >
+
+                <div class="checkin-form-group">
+
+                    <label for="clientId">
+                        CLIENT ID
+                    </label>
+
+                    <div class="checkin-id-input">
+
+                        <div class="checkin-input-icon">
+
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5Zm0 2c-4.42 0-8 2.24-8 5v2h16v-2c0-2.76-3.58-5-8-5Z"
+                                />
+                            </svg>
+
+                        </div>
+
+                        <input
+                            type="text"
+                            name="client_id"
+                            id="clientId"
+                            placeholder="WL0001"
+                            maxlength="6"
+                            autocomplete="off"
+                            required
+                            autofocus
+                        >
+
+                    </div>
+
+                    <div
+                        id="clientIdError"
+                        class="checkin-validation-error"
+                        style="display:none;"
+                    ></div>
+
+                    <p class="checkin-input-help">
+                        Your Client ID was provided when you registered.
+                        Example: <strong>WL0001</strong>
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="checkin-main-button"
+                >
+
+                    <span>
+                        Continue Check-In
+                    </span>
+
+                    <span class="checkin-button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <div class="checkin-register-link">
+
+                <span>
+                    Don't have a Client ID?
+                </span>
+
+                <a href="/register">
+                    Register as a New Client
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+    const form =
+        document.getElementById("checkinForm");
+
+    const clientIdInput =
+        document.getElementById("clientId");
+
+    const clientIdError =
+        document.getElementById("clientIdError");
+
+
+    function validateClientId() {
+
+        const clientId =
+            clientIdInput.value.trim();
+
+        const pattern =
+            /^WL\d{4}$/i;
+
+
+        if (!pattern.test(clientId)) {
+
+            clientIdError.innerText =
+                "Invalid Client ID. Please enter an ID in the format WL0001.";
+
+            clientIdError.style.display =
+                "block";
+
+            return false;
+        }
+
+
+        clientIdInput.value =
+            clientId.toUpperCase();
+
+        clientIdError.style.display =
+            "none";
+
+        return true;
+    }
+
+
+    clientIdInput.addEventListener(
+        "input",
+        function () {
+
+            clientIdInput.value =
+                clientIdInput.value.toUpperCase();
+
+            clientIdError.style.display =
+                "none";
+        }
+    );
+
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            if (!validateClientId()) {
+
+                event.preventDefault();
+
+                clientIdInput.focus();
+            }
+        }
+    );
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{% extends "admin_layout.html" %}{% block title %}Subscriptions | WORKLAB{% endblock %}{% block content %}
+<div class="admin-page-header"><div><p class="admin-eyebrow">MEMBERSHIPS</p><h1>Subscriptions</h1><p>Search clients and filter membership history, status and type.</p></div></div>
+<form class="admin-filter-card" method="GET">
+<div class="filter-main-row">
+<label class="filter-search">Search client<input name="search" value="{{ search }}" placeholder="Name, WL ID or phone"></label>
+<label>Status<select name="status"><option>All</option>{% for x in ['Active','Ending Soon','Expired'] %}<option {{ 'selected' if status_filter==x }}>{{ x }}</option>{% endfor %}</select></label>
+<label>Type<select name="type"><option>All</option><option {{ 'selected' if type_filter=='Weekly' }}>Weekly</option><option {{ 'selected' if type_filter=='Monthly' }}>Monthly</option></select></label>
+<input type="hidden" name="period" value="{{ period }}"><button class="admin-button admin-button-primary">Search / Apply</button><a class="admin-button" href="{{ url_for('admin_subscriptions') }}">Reset</a>
+</div>
+<div class="period-filter filter-periods"><a class="{{ 'active' if period=='today' }}" href="?period=today&search={{ search }}&status={{ status_filter }}&type={{ type_filter }}">Today</a><a class="{{ 'active' if period=='7days' }}" href="?period=7days&search={{ search }}&status={{ status_filter }}&type={{ type_filter }}">7 Days</a><a class="{{ 'active' if period=='month' }}" href="?period=month&search={{ search }}&status={{ status_filter }}&type={{ type_filter }}">This Month</a><a class="{{ 'active' if period=='year' }}" href="?period=year&search={{ search }}&status={{ status_filter }}&type={{ type_filter }}">This Year</a></div>
+<div class="custom-inline"><span>Custom start-date period</span><input type="date" name="start" value="{{ start_date }}"><span>to</span><input type="date" name="end" value="{{ end_date }}"><button name="period" value="custom" class="admin-button">Apply dates</button></div>
+</form>
+<div class="summary-grid summary-four"><div><span>Subscriptions Found</span><strong>{{ total_subscriptions }}</strong></div><div><span>Active</span><strong>{{ active_count }}</strong></div><div><span>Ending Soon</span><strong>{{ ending_soon_count }}</strong></div><div><span>Expired</span><strong>{{ expired_count }}</strong></div></div>
+<section class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Client</th><th>Phone</th><th>Type</th><th>Start</th><th>End</th><th>Status</th></tr></thead><tbody>
+{% for s in subscriptions %}<tr><td><strong>{{ s['full_name'] }}</strong><br><small>{{ s['client_id'] }}</small></td><td>{{ s['phone'] }}</td><td>{{ s['subscription_type'] }}</td><td>{{ s['start_date'][:10] }}</td><td>{{ s['end_date'][:10] }}</td><td>{% if s['subscription_status']=='Active' %}<span class="status-badge status-active">Active</span>{% elif s['subscription_status']=='Ending Soon' %}<span class="status-badge status-soon">Ending Soon</span>{% else %}<span class="status-badge status-expired">Expired</span>{% endif %}</td></tr>{% else %}<tr><td colspan="6" class="empty-cell">No subscriptions match these filters.</td></tr>{% endfor %}
+</tbody></table></div></section>{% endblock %}

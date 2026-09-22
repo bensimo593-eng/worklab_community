@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Check-In Complete | WORKLAB</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body class="success-body">
+
+<section class="success-page">
+
+    <div class="success-background"></div>
+
+    <div class="success-overlay"></div>
+
+
+    <div class="success-container">
+
+
+        <!-- LOGO -->
+
+        <a href="/" class="success-logo-link">
+
+            <img
+                src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}"
+                alt="WORKLAB"
+                class="success-logo"
+            >
+
+        </a>
+
+
+        <!-- CARD -->
+
+        <div class="success-card">
+
+
+            <!-- ICON -->
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+
+            <p class="success-small-title">
+                WORKLAB COMMUNITY
+            </p>
+
+
+            <h1>
+                Check-In Complete
+            </h1>
+
+
+            <p class="success-message">
+
+                Welcome back,
+                <strong>{{ full_name }}</strong>.
+
+                Your visit has been successfully registered.
+
+            </p>
+
+
+            <!-- CLIENT ID -->
+
+            <div class="client-id-box">
+
+                <span class="client-id-label">
+                    CLIENT ID
+                </span>
+
+                <strong class="client-id-value">
+                    {{ client_id }}
+                </strong>
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div class="success-details">
+
+
+                <div class="success-detail">
+
+                    <span>
+                        Client
+                    </span>
+
+                    <strong>
+                        {{ full_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="success-detail">
+
+                    <span>
+                        Today's Plan
+                    </span>
+
+                    <strong>
+                        {{ plan }}
+                    </strong>
+
+                </div>
+
+
+                <div class="success-detail">
+
+                    <span>
+                        Subscription
+                    </span>
+
+                    <strong>
+                        {{ subscription_display }}
+                    </strong>
+
+                </div>
+
+
+                <div class="success-detail">
+
+                    <span>
+                        Visit Price
+                    </span>
+
+                    <strong>
+                        {{ visit_price }} DH
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            {% if subscription_fee > 0 %}
+
+            <div class="checkin-payment-breakdown">
+
+                <div>
+
+                    <span>
+                        Visit
+                    </span>
+
+                    <strong>
+                        {{ visit_price }} DH
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        {{ subscription_display }} Subscription
+                    </span>
+
+                    <strong>
+                        {{ subscription_fee }} DH
+                    </strong>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- TOTAL -->
+
+            <div class="success-total">
+
+                <div>
+
+                    <span>
+                        TOTAL PAYMENT
+                    </span>
+
+                    <small>
+                        Today's check-in
+                    </small>
+
+                </div>
+
+                <strong>
+                    {{ total }} DH
+                </strong>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="success-actions">
+
+
+                <a
+                    href="/"
+                    class="success-primary-button"
+                >
+
+                    <span class="success-button-text">
+                        Back to Home
+                    </span>
+
+                    <span class="success-button-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="/checkin"
+                    class="success-secondary-button"
+                >
+                    Another Check-In
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="success-footer">
+
+            <span class="success-footer-line"></span>
+
+            <span class="success-footer-text">
+                A Space for Bright Minds
+            </span>
+
+            <span class="success-footer-line"></span>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

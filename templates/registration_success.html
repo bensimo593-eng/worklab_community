@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Registration Complete | WORKLAB</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+
+<body class="success-body">
+
+<section class="success-page">
+
+    <!-- BACKGROUND -->
+    <div class="success-background"></div>
+
+    <!-- DARK OVERLAY -->
+    <div class="success-overlay"></div>
+
+
+    <div class="success-container">
+
+
+        <!-- WORKLAB LOGO -->
+
+        <a
+            href="/"
+            class="success-logo-link"
+        >
+
+            <img
+                src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}"
+                alt="WORKLAB Coworking Space"
+                class="success-logo"
+            >
+
+        </a>
+
+
+        <!-- SUCCESS CARD -->
+
+        <div class="success-card">
+
+
+            <!-- SUCCESS ICON -->
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+
+            <!-- TITLE -->
+
+            <p class="success-small-title">
+                WELCOME TO WORKLAB
+            </p>
+
+
+            <h1>
+                Registration Complete
+            </h1>
+
+
+            <p class="success-message">
+                Your profile has been created successfully.
+                You're now part of the WORKLAB community.
+            </p>
+
+
+            <!-- CLIENT ID -->
+
+            <div class="client-id-box">
+
+                <span class="client-id-label">
+                    YOUR CLIENT ID
+                </span>
+
+
+                <strong class="client-id-value">
+                    {{ client_id }}
+                </strong>
+
+
+                <p>
+                    Keep this ID. You will need it
+                    for your future check-ins.
+                </p>
+
+            </div>
+
+
+            <!-- CLIENT INFORMATION -->
+
+            <div class="success-details">
+
+
+                <div class="success-detail">
+
+                    <span>
+                        Client
+                    </span>
+
+                    <strong>
+                        {{ full_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="success-detail">
+
+                    <span>
+                        Status
+                    </span>
+
+                    <strong>
+                        {{ status }}
+                    </strong>
+
+                </div>
+
+
+                <div class="success-detail">
+
+                    <span>
+                        Today's Plan
+                    </span>
+
+                    <strong>
+                        {{ plan }}
+                    </strong>
+
+                </div>
+
+
+                <div class="success-detail">
+
+                    <span>
+                        Subscription
+                    </span>
+
+                    <strong>
+                        {{ subscription }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="success-total">
+
+                <div>
+
+                    <span>
+                        TOTAL PAYMENT
+                    </span>
+
+                    <small>
+                        Today's registration
+                    </small>
+
+                </div>
+
+
+                <strong>
+                    {{ total }} DH
+                </strong>
+
+            </div>
+
+
+            <!-- ACTION BUTTONS -->
+
+            <div class="success-actions">
+
+
+                <a
+                    href="/"
+                    class="success-primary-button"
+                >
+
+                    <span class="success-button-text">
+                        Back to Home
+                    </span>
+
+                    <span class="success-button-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="/checkin"
+                    class="success-secondary-button"
+                >
+                    Existing Client Check-In
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="success-footer">
+
+            <span class="success-footer-line"></span>
+
+            <span class="success-footer-text">
+                A Space for Bright Minds
+            </span>
+
+            <span class="success-footer-line"></span>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+</body>
+
+</html>

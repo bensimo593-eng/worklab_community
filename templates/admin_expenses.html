@@ -1,0 +1,621 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Expenses | WORKLAB{% endblock %}
+
+{% block content %}
+
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
+
+<div class="admin-page-header">
+    <div>
+        <p class="admin-eyebrow">PRIVATE FINANCE</p>
+        <h1>Expenses</h1>
+        <p>Record, analyse and manage WORKLAB operating charges.</p>
+    </div>
+</div>
+
+
+<!-- =====================================================
+     ADD EXPENSE + FILTERS
+     ===================================================== -->
+
+<div class="admin-grid-2 expense-layout">
+
+    <!-- ADD EXPENSE -->
+
+    <section class="admin-panel">
+
+        <h2>Add Expense</h2>
+
+        <form method="POST" class="admin-form">
+
+            <div class="admin-form-row">
+
+                <label>
+                    Date
+
+                    <input
+                        type="date"
+                        name="expense_date"
+                        value="{{ today }}"
+                        required
+                    >
+                </label>
+
+
+                <label>
+                    Category
+
+                    <select name="category" required>
+
+                        <option value="">
+                            Choose...
+                        </option>
+
+                        {% for c in [
+                            'Rent',
+                            'Electricity',
+                            'Water',
+                            'Internet',
+                            'Drinks & Snacks',
+                            'Cleaning',
+                            'Equipment',
+                            'Maintenance',
+                            'Supplies',
+                            'Salaries',
+                            'Marketing',
+                            'Taxes & Fees',
+                            'Other'
+                        ] %}
+
+                        <option value="{{ c }}">
+                            {{ c }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </label>
+
+            </div>
+
+
+            <label>
+                Description
+
+                <input
+                    type="text"
+                    name="description"
+                    placeholder="Optional details"
+                >
+            </label>
+
+
+            <label>
+                Amount (DH)
+
+                <input
+                    type="number"
+                    name="amount"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="0.00"
+                    required
+                >
+            </label>
+
+
+            <button
+                type="submit"
+                class="admin-button admin-button-primary"
+            >
+                Add Expense
+            </button>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- FILTER EXPENSES -->
+
+    <section class="admin-panel">
+
+        <h2>Filter Expenses</h2>
+
+        <form method="GET" class="admin-form">
+
+            <label>
+                Category
+
+                <select name="category">
+
+                    <option value="All">
+                        All
+                    </option>
+
+                    {% for c in [
+                        'Rent',
+                        'Electricity',
+                        'Water',
+                        'Internet',
+                        'Drinks & Snacks',
+                        'Cleaning',
+                        'Equipment',
+                        'Maintenance',
+                        'Supplies',
+                        'Salaries',
+                        'Marketing',
+                        'Taxes & Fees',
+                        'Other'
+                    ] %}
+
+                    <option
+                        value="{{ c }}"
+                        {% if category_filter == c %}selected{% endif %}
+                    >
+                        {{ c }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </label>
+
+
+            <div class="admin-form-row">
+
+                <label>
+                    From
+
+                    <input
+                        type="date"
+                        name="start"
+                        value="{{ start_date }}"
+                    >
+                </label>
+
+
+                <label>
+                    To
+
+                    <input
+                        type="date"
+                        name="end"
+                        value="{{ end_date }}"
+                    >
+                </label>
+
+            </div>
+
+
+            <button
+                type="submit"
+                name="period"
+                value="custom"
+                class="admin-button admin-button-primary"
+            >
+                Apply Filter
+            </button>
+
+
+            <a
+                href="{{ url_for('admin_expenses') }}"
+                class="admin-button"
+            >
+                Reset
+            </a>
+
+        </form>
+
+
+        <div class="expense-total-box">
+
+            <span>
+                Total filtered expenses
+            </span>
+
+            <strong>
+                {{ "%.2f"|format(total_expenses) }} DH
+            </strong>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+
+<!-- =====================================================
+     EXPENSE HISTORY
+     ===================================================== -->
+
+<section class="admin-panel">
+
+    <div class="expense-history-header">
+
+        <div>
+            <h2>Expense History</h2>
+
+            <p>
+                Review and correct recorded operating expenses.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="admin-table-wrap">
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Added By</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for e in expenses %}
+
+                <tr>
+
+                    <td>
+                        {{ e['expense_date'] }}
+                    </td>
+
+
+                    <td>
+                        {{ e['category'] }}
+                    </td>
+
+
+                    <td>
+                        {{ e['description'] or '—' }}
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+                            {{ "%.2f"|format(e['amount']) }} DH
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+                        {{ e['created_by_name'] or '—' }}
+                    </td>
+
+
+                    <td>
+
+                        <div class="expense-actions">
+
+    <!-- EDIT -->
+    <a
+        href="{{ url_for('admin_edit_expense', expense_id=e['id']) }}"
+        class="expense-action-btn expense-edit-btn"
+        title="Edit expense"
+        aria-label="Edit expense"
+    >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+        </svg>
+    </a>
+
+
+    <!-- DELETE -->
+    <button
+        type="button"
+        class="expense-action-btn expense-delete-btn"
+        data-expense-id="{{ e['id'] }}"
+        data-category="{{ e['category'] }}"
+        data-amount="{{ '%.2f'|format(e['amount']) }}"
+        onclick="openExpenseDeleteModal(this)"
+        title="Delete expense"
+        aria-label="Delete expense"
+    >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6h18"></path>
+            <path d="M8 6V4h8v2"></path>
+            <path d="M19 6l-1 14H6L5 6"></path>
+            <path d="M10 11v5"></path>
+            <path d="M14 11v5"></path>
+        </svg>
+    </button>
+
+</div>
+
+                    </td>
+
+                </tr>
+
+
+                {% else %}
+
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty-cell"
+                    >
+                        No expenses match these filters.
+                    </td>
+
+                </tr>
+
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DELETE EXPENSE POPUP
+     ===================================================== -->
+
+<div
+    id="expenseDeleteModal"
+    class="expense-modal"
+>
+
+
+    <!-- BACKGROUND -->
+
+    <div
+        class="expense-modal-backdrop"
+        onclick="closeExpenseDeleteModal()"
+    ></div>
+
+
+
+    <!-- POPUP -->
+
+    <div class="expense-modal-card">
+
+
+        <div class="expense-modal-icon">
+            !
+        </div>
+
+
+        <h2>
+            Delete Expense
+        </h2>
+
+
+        <p class="expense-modal-description">
+            You are about to delete this expense.
+        </p>
+
+
+
+        <!-- EXPENSE INFORMATION -->
+
+        <div class="expense-delete-summary">
+
+
+            <div>
+
+                <span>
+                    Category
+                </span>
+
+                <strong id="deleteExpenseCategory">
+                    —
+                </strong>
+
+            </div>
+
+
+
+            <div>
+
+                <span>
+                    Amount
+                </span>
+
+                <strong id="deleteExpenseAmount">
+                    —
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- WARNING -->
+
+        <p class="expense-warning-text">
+
+            This expense will no longer be included in
+            WORKLAB expenses or net profit.
+
+            The deletion will still be recorded in the
+            audit history.
+
+        </p>
+
+
+
+        <!-- DELETE FORM -->
+
+        <form
+            id="expenseDeleteForm"
+            method="POST"
+            class="admin-form"
+        >
+
+
+            <label>
+
+                Reason for deletion
+
+                <textarea
+                    name="reason"
+                    rows="3"
+                    placeholder="Example: Test expense, duplicate entry, wrong amount..."
+                    required
+                ></textarea>
+
+            </label>
+
+
+
+            <div class="expense-modal-actions">
+
+
+                <button
+                    type="button"
+                    class="admin-button"
+                    onclick="closeExpenseDeleteModal()"
+                >
+                    Cancel
+                </button>
+
+
+
+                <button
+                    type="submit"
+                    class="admin-button expense-confirm-delete"
+                >
+                    Delete Expense
+                </button>
+
+
+            </div>
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+function openExpenseDeleteModal(button) {
+
+    const expenseId =
+        button.dataset.expenseId;
+
+    const category =
+        button.dataset.category;
+
+    const amount =
+        button.dataset.amount;
+
+
+    const modal =
+        document.getElementById(
+            "expenseDeleteModal"
+        );
+
+
+    const form =
+        document.getElementById(
+            "expenseDeleteForm"
+        );
+
+
+    const categoryElement =
+        document.getElementById(
+            "deleteExpenseCategory"
+        );
+
+
+    const amountElement =
+        document.getElementById(
+            "deleteExpenseAmount"
+        );
+
+
+    categoryElement.textContent =
+        category;
+
+
+    amountElement.textContent =
+        amount + " DH";
+
+
+    form.action =
+        "/admin/expenses/" +
+        expenseId +
+        "/delete";
+
+
+    modal.classList.add(
+        "expense-modal-open"
+    );
+
+}
+
+
+
+function closeExpenseDeleteModal() {
+
+    const modal =
+        document.getElementById(
+            "expenseDeleteModal"
+        );
+
+
+    modal.classList.remove(
+        "expense-modal-open"
+    );
+
+}
+
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+
+            closeExpenseDeleteModal();
+
+        }
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

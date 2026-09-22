@@ -1,0 +1,24 @@
+{% extends "admin_layout.html" %}{% block title %}Visits | WORKLAB{% endblock %}{% block content %}
+<div class="admin-page-header"><div><p class="admin-eyebrow">OPERATIONS</p><h1>Visits</h1><p>Search a client and analyse how often they visit WORKLAB.</p></div></div>
+
+<form class="admin-filter-card" method="GET">
+<div class="filter-main-row">
+<label class="filter-search">Search client<input name="search" value="{{ search }}" placeholder="Name, WL ID or phone"></label>
+<label>Plan<select name="plan"><option>All</option><option {{ 'selected' if plan_filter=='Half Day' }}>Half Day</option><option {{ 'selected' if plan_filter=='Full Day' }}>Full Day</option></select></label>
+<input type="hidden" name="period" value="{{ period }}">
+<button class="admin-button admin-button-primary">Search / Apply</button>
+<a class="admin-button" href="{{ url_for('admin_visits') }}">Reset</a>
+</div>
+<div class="period-filter filter-periods">
+<a class="{{ 'active' if period=='today' }}" href="?period=today&search={{ search }}&plan={{ plan_filter }}">Today</a><a class="{{ 'active' if period=='7days' }}" href="?period=7days&search={{ search }}&plan={{ plan_filter }}">7 Days</a><a class="{{ 'active' if period=='month' }}" href="?period=month&search={{ search }}&plan={{ plan_filter }}">This Month</a><a class="{{ 'active' if period=='year' }}" href="?period=year&search={{ search }}&plan={{ plan_filter }}">This Year</a>
+</div>
+<div class="custom-inline"><span>Custom period</span><input type="date" name="start" value="{{ start_date }}"><span>to</span><input type="date" name="end" value="{{ end_date }}"><button name="period" value="custom" class="admin-button">Apply dates</button></div>
+</form>
+
+<div class="summary-grid summary-four"><div><span>Visits Found</span><strong>{{ total_visits }}</strong></div><div><span>Half Days</span><strong>{{ half_day_count }}</strong></div><div><span>Full Days</span><strong>{{ full_day_count }}</strong></div><div><span>Visit Amount</span><strong>{{ "%.2f"|format(total_visit_amount) }} DH</strong></div></div>
+
+{% if search %}<div class="search-result-note">Showing visits matching <strong>“{{ search }}”</strong> from {{ start_date }} to {{ end_date }}. <strong>{{ total_visits }}</strong> visit(s) found.</div>{% endif %}
+
+<section class="admin-panel"><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Client ID</th><th>Client</th><th>Status</th><th>Plan</th><th>Price</th><th>Date</th></tr></thead><tbody>
+{% for v in visits %}<tr><td><strong>{{ v['client_id'] }}</strong></td><td>{{ v['full_name'] }}<br><small>{{ v['phone'] }}</small></td><td>{{ v['status'] }}</td><td>{{ v['plan'] }}</td><td>{{ v['price'] }} DH</td><td>{{ v['visit_date'] }}</td></tr>{% else %}<tr><td colspan="6" class="empty-cell">No visits match these filters.</td></tr>{% endfor %}
+</tbody></table></div></section>{% endblock %}

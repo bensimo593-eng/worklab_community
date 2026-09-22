@@ -1,0 +1,274 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Additional Services | WORKLAB{% endblock %}
+
+{% block content %}
+
+<div class="admin-page-header">
+
+    <div>
+        <p class="admin-eyebrow">PRIVATE FINANCE</p>
+        <h1>Additional Services</h1>
+        <p>Paid drinks, snacks, PS5 and printing.</p>
+    </div>
+
+</div>
+
+
+<form class="admin-filter-card" method="GET">
+
+    <div class="filter-main-row">
+
+        <label class="filter-search">
+            Search client
+
+            <input
+                name="search"
+                value="{{ search }}"
+                placeholder="Name, WL ID or phone"
+            >
+        </label>
+
+
+        <label>
+            Service
+
+            <select name="service">
+
+                <option>All</option>
+
+                {% for service_name in ['Drink','Snack','PS5','Printing'] %}
+
+                    <option
+                        value="{{ service_name }}"
+                        {% if service_filter == service_name %}selected{% endif %}
+                    >
+                        {{ service_name }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </label>
+
+
+        <input
+            type="hidden"
+            name="period"
+            value="{{ period }}"
+        >
+
+
+        <button class="admin-button admin-button-primary">
+            Search / Apply
+        </button>
+
+
+        <a
+            class="admin-button"
+            href="{{ url_for('admin_services') }}"
+        >
+            Reset
+        </a>
+
+    </div>
+
+
+    <div class="period-filter filter-periods">
+
+        <a
+            class="{{ 'active' if period=='today' }}"
+            href="?period=today&search={{ search }}&service={{ service_filter }}"
+        >
+            Today
+        </a>
+
+        <a
+            class="{{ 'active' if period=='7days' }}"
+            href="?period=7days&search={{ search }}&service={{ service_filter }}"
+        >
+            7 Days
+        </a>
+
+        <a
+            class="{{ 'active' if period=='month' }}"
+            href="?period=month&search={{ search }}&service={{ service_filter }}"
+        >
+            This Month
+        </a>
+
+        <a
+            class="{{ 'active' if period=='year' }}"
+            href="?period=year&search={{ search }}&service={{ service_filter }}"
+        >
+            This Year
+        </a>
+
+    </div>
+
+
+    <div class="custom-inline">
+
+        <span>Custom period</span>
+
+        <input
+            type="date"
+            name="start"
+            value="{{ start_date }}"
+        >
+
+        <span>to</span>
+
+        <input
+            type="date"
+            name="end"
+            value="{{ end_date }}"
+        >
+
+        <button
+            name="period"
+            value="custom"
+            class="admin-button"
+        >
+            Apply dates
+        </button>
+
+    </div>
+
+</form>
+
+
+<div class="summary-grid summary-three">
+
+    <div>
+        <span>Services Found</span>
+        <strong>{{ services|length }}</strong>
+    </div>
+
+    <div>
+        <span>Additional Services Revenue</span>
+
+        <strong>
+            {{ "%.2f"|format(total_services_revenue) }} DH
+        </strong>
+    </div>
+
+    <div>
+        <span>Selected Period</span>
+
+        <strong class="summary-date">
+            {{ start_date }} → {{ end_date }}
+        </strong>
+    </div>
+
+</div>
+
+
+<section class="admin-panel">
+
+    <div class="admin-table-wrap">
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+                    <th>Client</th>
+                    <th>Phone</th>
+                    <th>Service</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for s in services %}
+
+                <tr>
+
+                    <td>
+                        <strong>{{ s['full_name'] }}</strong>
+                        <br>
+                        <small>{{ s['client_id'] }}</small>
+                    </td>
+
+                    <td>
+                        {{ s['phone'] }}
+                    </td>
+
+                    <td>
+                        {{ s['service_type'] }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ "%.2f"|format(s['price']) }} DH
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ s['service_date'] }}
+                    </td>
+
+
+                    <td>
+
+                        <div class="expense-actions">
+
+                            <a
+                                href="{{ url_for(
+                                    'admin_edit_service',
+                                    service_id=s['id']
+                                ) }}"
+                                class="expense-action-btn expense-edit-btn"
+                                title="Edit service"
+                                aria-label="Edit service"
+                            >
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                                </svg>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty-cell"
+                    >
+                        No additional services match these filters.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

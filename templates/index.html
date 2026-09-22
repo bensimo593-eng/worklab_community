@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORKLAB | Coworking Space</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<section class="home-page">
+    <div class="home-overlay"></div>
+    <div class="home-content">
+        <div class="logo-area">
+            <a href="{{ url_for('staff_access') }}" class="logo-link" title="Staff Access">
+                <img src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}"
+                     alt="WORKLAB Coworking Space"
+                     class="worklab-logo">
+            </a>
+        </div>
+
+        <div class="hero-text">
+            <h1>More Than a Workspace</h1>
+            <h2>A Community</h2>
+            <p>Work <span>•</span> Learn <span>•</span> Connect <span>•</span> Grow</p>
+        </div>
+
+        <div class="action-container">
+            <a href="/register" class="action-card new-client-card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5Zm0 2c-4.42 0-8 2.24-8 5v2h16v-2c0-2.76-3.58-5-8-5Z"/></svg>
+                </div>
+                <div class="card-information"><h3>New Client</h3><p>Register and join<br>our community</p></div>
+                <div class="card-arrow">→</div>
+            </a>
+
+            <a href="/checkin" class="action-card existing-client-card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11c2.21 0 4-1.79 4-4S10.21 3 8 3 4 4.79 4 7s1.79 4 4 4Zm8 0c1.66 0 3-1.34 3-3s-1.34-3-3-3c-.32 0-.63.05-.91.14A5 5 0 0 1 16 8c0 1.07-.34 2.06-.91 2.86.28.09.59.14.91.14ZM8 13c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5Zm8 0c-.29 0-.62.02-.97.05 1.19.86 1.97 1.89 1.97 3.45V19h5v-2c0-2.21-2.69-4-6-4Z"/></svg>
+                </div>
+                <div class="card-information"><h3>Existing Client</h3><p>Check in to<br>your visit</p></div>
+                <div class="card-arrow">→</div>
+            </a>
+        </div>
+
+        <a href="{{ url_for('additional_services') }}" class="additional-service-link">
+            <span class="additional-service-plus">+</span>
+            Additional Services
+        </a>
+
+        <div class="home-footer">
+            <span class="gold-line"></span>
+            <span>A Space for Bright Minds</span>
+            <span class="gold-line"></span>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,239 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Edit Client | WORKLAB{% endblock %}
+
+{% block content %}
+
+
+<div class="admin-page-header">
+
+    <div>
+
+        <p class="admin-eyebrow">
+            COMMUNITY
+        </p>
+
+        <h1>
+            Edit Client
+        </h1>
+
+        <p>
+            Update the client's personal information.
+        </p>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('clients') }}"
+        class="admin-button"
+    >
+        ← Back to Clients
+    </a>
+
+</div>
+
+
+
+<section class="admin-panel expense-edit-panel">
+
+
+    <div class="expense-edit-heading">
+
+        <div>
+
+            <span class="expense-edit-label">
+                CLIENT PROFILE
+            </span>
+
+            <h2>
+                {{ client['full_name'] }}
+            </h2>
+
+        </div>
+
+
+        <div class="expense-current-amount">
+
+            <span>
+                Client ID
+            </span>
+
+            <strong>
+                {{ client['client_id'] }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+
+    <form
+        method="POST"
+        class="admin-form expense-edit-form"
+    >
+
+
+        <!-- CLIENT ID -->
+
+        <label>
+
+            Client ID
+
+            <input
+                type="text"
+                value="{{ client['client_id'] }}"
+                disabled
+            >
+
+        </label>
+
+
+
+        <!-- FULL NAME -->
+
+        <label>
+
+            Full Name
+
+            <input
+                type="text"
+                name="full_name"
+                value="{{ client['full_name'] }}"
+                required
+            >
+
+        </label>
+
+
+
+        <div class="admin-form-row">
+
+
+            <!-- PHONE -->
+
+            <label>
+
+                Phone Number
+
+                <input
+                    type="text"
+                    name="phone"
+                    value="{{ client['phone'] }}"
+                    required
+                >
+
+            </label>
+
+
+
+            <!-- EMAIL -->
+
+            <label>
+
+                Email
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ client['email'] or '' }}"
+                    placeholder="Optional"
+                >
+
+            </label>
+
+        </div>
+
+
+
+        <!-- STATUS -->
+
+        <label>
+
+            Client Status
+
+            <select
+                name="status"
+                required
+            >
+
+                <option
+                    value="Student"
+                    {% if client['status'] == 'Student' %}selected{% endif %}
+                >
+                    Student
+                </option>
+
+
+                <option
+                    value="Normal"
+                    {% if client['status'] == 'Normal' %}selected{% endif %}
+                >
+                    Non-Student
+                </option>
+
+            </select>
+
+        </label>
+
+
+
+        <!-- REASON -->
+
+        <label>
+
+            Reason for modification
+
+            <textarea
+                name="reason"
+                rows="3"
+                placeholder="Example: Client changed phone number..."
+                required
+            ></textarea>
+
+        </label>
+
+
+
+        <div class="expense-edit-information">
+
+            <strong>
+                Client ID cannot be changed
+            </strong>
+
+            <p>
+                {{ client['client_id'] }} remains permanently
+                connected to this client's visits,
+                subscriptions, payments and additional services.
+            </p>
+
+        </div>
+
+
+
+        <div class="expense-edit-actions">
+
+            <a
+                href="{{ url_for('clients') }}"
+                class="admin-button"
+            >
+                Cancel
+            </a>
+
+
+            <button
+                type="submit"
+                class="admin-button admin-button-primary"
+            >
+                Save Changes
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+{% endblock %}

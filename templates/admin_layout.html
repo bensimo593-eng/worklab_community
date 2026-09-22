@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}WORKLAB Admin{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a href="{{ url_for('admin_dashboard') }}">
+      <img class="admin-sidebar-logo" src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}" alt="WORKLAB">
+    </a>
+    <div class="admin-user-box">
+      <strong>{{ current_user['full_name'] }}</strong>
+      <span>{{ current_user['role'] }}</span>
+    </div>
+    <nav class="admin-nav">
+      <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+      {% if 'view_clients' in permissions %}<a href="{{ url_for('clients') }}">Clients</a>{% endif %}
+      {% if 'view_visits' in permissions %}<a href="{{ url_for('admin_visits') }}">Visits</a>{% endif %}
+      {% if 'view_subscriptions' in permissions %}<a href="{{ url_for('admin_subscriptions') }}">Subscriptions</a>{% endif %}
+      {% if 'view_finance' in permissions %}<a href="{{ url_for('admin_services') }}">Additional Services</a>{% endif %}
+      {% if 'view_finance' in permissions or 'manage_expenses' in permissions %}<div class="admin-nav-section">FINANCE</div>{% endif %}
+      {% if 'view_finance' in permissions %}<a href="{{ url_for('admin_payments') }}">Payments</a>{% endif %}
+      {% if 'manage_expenses' in permissions %}<a href="{{ url_for('admin_expenses') }}">Expenses</a>{% endif %}
+      {% if current_user['role'] == 'Admin' %}<div class="admin-nav-section">ADMINISTRATION</div><a href="{{ url_for('admin_users') }}">Users & Access</a>{% endif %}
+      <a class="admin-logout" href="{{ url_for('admin_logout') }}">Logout</a>
+    </nav>
+  </aside>
+  <main class="admin-main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}<div class="admin-flash">{{ message }}</div>{% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>

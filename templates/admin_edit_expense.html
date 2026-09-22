@@ -1,0 +1,193 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Edit Expense | WORKLAB{% endblock %}
+
+{% block content %}
+
+<div class="admin-page-header">
+
+    <div>
+        <p class="admin-eyebrow">PRIVATE FINANCE</p>
+        <h1>Edit Expense</h1>
+        <p>Correct an existing WORKLAB operating expense.</p>
+    </div>
+
+    <a
+        href="{{ url_for('admin_expenses') }}"
+        class="admin-button"
+    >
+        ← Back to Expenses
+    </a>
+
+</div>
+
+
+<section class="admin-panel expense-edit-panel">
+
+    <div class="expense-edit-heading">
+
+        <div>
+            <span class="expense-edit-label">
+                EXPENSE #{{ expense['id'] }}
+            </span>
+
+            <h2>
+                {{ expense['category'] }}
+            </h2>
+        </div>
+
+
+        <div class="expense-current-amount">
+
+            <span>Current Amount</span>
+
+            <strong>
+                {{ "%.2f"|format(expense['amount']) }} DH
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <form method="POST" class="admin-form expense-edit-form">
+
+
+        <!-- DATE + CATEGORY -->
+
+        <div class="admin-form-row">
+
+            <label>
+                Date
+
+                <input
+                    type="date"
+                    name="expense_date"
+                    value="{{ expense['expense_date'] }}"
+                    required
+                >
+            </label>
+
+
+            <label>
+                Category
+
+                <select name="category" required>
+
+                    {% for c in [
+                        'Rent',
+                        'Electricity',
+                        'Water',
+                        'Internet',
+                        'Drinks & Snacks',
+                        'Cleaning',
+                        'Equipment',
+                        'Maintenance',
+                        'Supplies',
+                        'Salaries',
+                        'Marketing',
+                        'Taxes & Fees',
+                        'Other'
+                    ] %}
+
+                    <option
+                        value="{{ c }}"
+                        {% if expense['category'] == c %}selected{% endif %}
+                    >
+                        {{ c }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </label>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <label>
+            Description
+
+            <input
+                type="text"
+                name="description"
+                value="{{ expense['description'] or '' }}"
+                placeholder="Optional details"
+            >
+        </label>
+
+
+        <!-- AMOUNT -->
+
+        <label>
+            Amount (DH)
+
+            <input
+                type="number"
+                name="amount"
+                value="{{ expense['amount'] }}"
+                min="0.01"
+                step="0.01"
+                required
+            >
+        </label>
+
+
+        <!-- REASON -->
+
+        <label>
+            Reason for modification
+
+            <textarea
+                name="reason"
+                rows="3"
+                placeholder="Example: Wrong amount entered, incorrect category..."
+                required
+            ></textarea>
+        </label>
+
+
+        <!-- INFORMATION -->
+
+        <div class="expense-edit-information">
+
+            <strong>Why is a reason required?</strong>
+
+            <p>
+                Financial information should remain traceable.
+                WORKLAB will keep a record of the previous values,
+                the new values, the staff member who made the
+                modification and the reason.
+            </p>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="expense-edit-actions">
+
+            <a
+                href="{{ url_for('admin_expenses') }}"
+                class="admin-button"
+            >
+                Cancel
+            </a>
+
+            <button
+                type="submit"
+                class="admin-button admin-button-primary"
+            >
+                Save Changes
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Edit Additional Service | WORKLAB{% endblock %}
+
+{% block content %}
+
+<div class="admin-page-header">
+
+    <div>
+        <p class="admin-eyebrow">PRIVATE FINANCE</p>
+        <h1>Edit Additional Service</h1>
+        <p>Correct an additional service transaction.</p>
+    </div>
+
+    <a
+        href="{{ url_for('admin_services') }}"
+        class="admin-button"
+    >
+        ← Back to Additional Services
+    </a>
+
+</div>
+
+
+<section class="admin-panel expense-edit-panel">
+
+    <div class="expense-edit-heading">
+
+        <div>
+            <span class="expense-edit-label">
+                SERVICE TRANSACTION
+            </span>
+
+            <h2>
+                {{ service['full_name'] }}
+            </h2>
+        </div>
+
+        <div class="expense-current-amount">
+            <span>Current Price</span>
+
+            <strong>
+                {{ "%.2f"|format(service['price']) }} DH
+            </strong>
+        </div>
+
+    </div>
+
+
+    <form
+        method="POST"
+        class="admin-form expense-edit-form"
+    >
+
+        <div class="admin-form-row">
+
+            <label>
+                Client ID
+
+                <input
+                    type="text"
+                    value="{{ service['client_id'] }}"
+                    disabled
+                >
+            </label>
+
+
+            <label>
+                Client Name
+
+                <input
+                    type="text"
+                    value="{{ service['full_name'] }}"
+                    disabled
+                >
+            </label>
+
+        </div>
+
+
+        <div class="admin-form-row">
+
+            <label>
+                Service
+
+                <select
+                    name="service_type"
+                    required
+                >
+
+                    {% for service_name in ['Drink', 'Snack', 'PS5', 'Printing'] %}
+
+                    <option
+                        value="{{ service_name }}"
+                        {% if service['service_type'] == service_name %}selected{% endif %}
+                    >
+                        {{ service_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+            </label>
+
+
+            <label>
+                Price (DH)
+
+                <input
+                    type="number"
+                    name="price"
+                    min="0.01"
+                    step="0.01"
+                    value="{{ '%.2f'|format(service['price']) }}"
+                    required
+                >
+            </label>
+
+        </div>
+
+
+        <label>
+            Transaction Date
+
+            <input
+                type="text"
+                value="{{ service['service_date'] }}"
+                disabled
+            >
+        </label>
+
+
+        <label>
+            Reason for modification
+
+            <textarea
+                name="reason"
+                rows="3"
+                placeholder="Example: Wrong price entered..."
+                required
+            ></textarea>
+        </label>
+
+
+        <div class="expense-edit-information">
+
+            <strong>
+                Revenue will be corrected automatically
+            </strong>
+
+            <p>
+                Changing the price here will also correct the
+                corresponding Additional Service payment, so
+                WORKLAB revenue and dashboard totals remain accurate.
+            </p>
+
+        </div>
+
+
+        <div class="expense-edit-actions">
+
+            <a
+                href="{{ url_for('admin_services') }}"
+                class="admin-button"
+            >
+                Cancel
+            </a>
+
+            <button
+                type="submit"
+                class="admin-button admin-button-primary"
+            >
+                Save Changes
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+{% endblock %}

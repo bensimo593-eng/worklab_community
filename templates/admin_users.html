@@ -1,0 +1,16 @@
+{% extends "admin_layout.html" %}{% block title %}Users & Access | WORKLAB{% endblock %}{% block content %}
+<div class="admin-page-header"><div><p class="admin-eyebrow">ADMINISTRATION</p><h1>Users & Access</h1><p>Create staff accounts and control access to sensitive business information.</p></div></div>
+<div class="admin-grid-2"><section class="admin-panel"><h2>Create User</h2><form method="POST" class="admin-form">
+<div class="admin-form-row"><label>Full Name<input name="full_name" required></label><label>Username<input name="username" required></label></div>
+<div class="admin-form-row"><label>Password<input type="password" name="password" minlength="6" required></label><label>Role<select name="role"><option>Staff</option><option>Manager</option></select></label></div>
+<label>Permissions</label><div class="permission-grid">
+<label class="permission-check"><input type="checkbox" name="permissions" value="view_clients" checked> Clients</label>
+<label class="permission-check"><input type="checkbox" name="permissions" value="view_visits" checked> Visits</label>
+<label class="permission-check"><input type="checkbox" name="permissions" value="view_subscriptions" checked> Subscriptions</label>
+<label class="permission-check"><input type="checkbox" name="permissions" value="view_finance"> Payments / Revenue</label>
+<label class="permission-check"><input type="checkbox" name="permissions" value="manage_expenses"> Expenses</label>
+</div><button class="admin-button admin-button-primary">Create User</button></form></section>
+<section class="admin-panel"><h2>Existing Users</h2><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Role</th><th>Access</th><th>Status</th></tr></thead><tbody>
+{% for u in users %}<tr><td>{{ u['full_name'] }}<br><small>@{{ u['username'] }}</small></td><td>{{ u['role'] }}</td><td>{% if u['role']=='Admin' %}Full access{% else %}{{ permissions_by_user[u['id']]|join(', ') or 'No permissions' }}{% endif %}</td><td>{% if u['is_active'] %}<span class="status-badge status-active">Active</span>{% else %}<span class="status-badge status-expired">Disabled</span>{% endif %}
+{% if u['id'] != current_user['id'] %}<form method="POST" action="{{ url_for('admin_toggle_user', user_id=u['id']) }}" style="margin-top:6px"><button class="admin-button">{{ 'Disable' if u['is_active'] else 'Enable' }}</button></form>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div></section></div>{% endblock %}

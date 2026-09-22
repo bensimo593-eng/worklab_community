@@ -1,0 +1,165 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Clients | WORKLAB{% endblock %}
+
+{% block content %}
+
+<div class="admin-page-header">
+
+    <div>
+        <p class="admin-eyebrow">COMMUNITY</p>
+        <h1>Clients</h1>
+        <p>Search and review WORKLAB client profiles.</p>
+    </div>
+
+    <form method="GET">
+
+        <input
+            style="height:40px;padding:0 12px;border:1px solid #d8dcda;border-radius:7px"
+            name="search"
+            value="{{ search }}"
+            placeholder="ID, name or phone"
+        >
+
+        <button class="admin-button admin-button-primary">
+            Search
+        </button>
+
+    </form>
+
+</div>
+
+
+<section class="admin-panel">
+
+    <div class="admin-table-wrap">
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+                    <th>Client ID</th>
+                    <th>Full Name</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Subscription</th>
+                    <th>Registration</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in clients %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ item.client['client_id'] }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ item.client['full_name'] }}
+                    </td>
+
+                    <td>
+                        {{ item.client['phone'] }}
+                    </td>
+
+                    <td>
+                        {{ item.client['status'] }}
+                    </td>
+
+                    <td>
+
+                        {{ item.subscription_type }}
+
+                        <br>
+
+                        {% if item.subscription_status == 'Active' %}
+
+                            <span class="status-badge status-active">
+                                Active
+                            </span>
+
+                        {% elif item.subscription_status == 'Expired' %}
+
+                            <span class="status-badge status-expired">
+                                Expired
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-badge">
+                                None
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ item.client['registration_date'][:10] }}
+                    </td>
+
+
+                    <!-- EDIT CLIENT -->
+
+                    <td>
+
+                        <div class="expense-actions">
+
+                            <a
+                                href="{{ url_for(
+                                    'admin_edit_client',
+                                    client_id=item.client['client_id']
+                                ) }}"
+                                class="expense-action-btn expense-edit-btn"
+                                title="Edit client"
+                                aria-label="Edit client"
+                            >
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                                </svg>
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="7">
+                        No clients found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

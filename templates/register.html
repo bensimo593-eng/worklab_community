@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>New Client | WORKLAB</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+
+<body class="register-body">
+
+<div class="register-page">
+
+
+    <!-- ==================================================
+         LEFT SIDE
+         ================================================== -->
+
+    <section class="register-brand-panel">
+
+        <div class="register-brand-overlay"></div>
+
+
+        <div class="register-brand-content">
+
+            <!-- LOGO -->
+
+            <a href="/" class="register-logo-link">
+
+                <img
+                    src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}"
+                    alt="WORKLAB Coworking Space"
+                    class="register-logo"
+                >
+
+            </a>
+
+
+            <!-- MESSAGE -->
+
+            <div class="register-brand-message">
+
+                <p class="register-small-title">
+                    WELCOME TO
+                </p>
+
+                <h1>
+                    WORKLAB
+                </h1>
+
+                <h2>
+                    Coworking Space
+                </h2>
+
+                <div class="register-gold-line"></div>
+
+                <p class="register-quote">
+                    A space designed for people who
+                    work, learn, connect and grow.
+                </p>
+
+            </div>
+
+
+            <div class="register-brand-bottom">
+
+                <span></span>
+
+                A Space for Bright Minds
+
+                <span></span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================================================
+         RIGHT SIDE / FORM
+         ================================================== -->
+
+    <main class="register-form-panel">
+
+        <div class="register-form-container">
+
+
+            <!-- TOP -->
+
+            <div class="register-top">
+
+                <a href="/" class="register-back">
+                    ← Back to Home
+                </a>
+
+                <div class="register-step">
+                    NEW CLIENT
+                </div>
+
+            </div>
+
+
+            <div class="register-heading">
+
+                <p class="register-eyebrow">
+                    JOIN OUR COMMUNITY
+                </p>
+
+                <h1>
+                    Create Your Profile
+                </h1>
+
+                <p>
+                    Enter your information and choose
+                    today's visit preferences.
+                </p>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            {% if error %}
+
+            <div class="register-error">
+
+                <strong>
+                    Please check your information.
+                </strong>
+
+                <span>
+                    {{ error }}
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- ==================================================
+                 FORM
+                 ================================================== -->
+
+            <form
+                method="POST"
+                action="/register"
+                id="registrationForm"
+                class="worklab-form"
+            >
+
+
+                <!-- FULL NAME -->
+
+                <div class="form-group full-width">
+
+                    <label for="fullName">
+                        Full Name
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="full_name"
+                        placeholder="Enter your full name"
+                        value="{{ form_data.get('full_name', '') if form_data else '' }}"
+                        minlength="2"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- PHONE -->
+
+                <div class="form-group full-width">
+
+                    <label>
+                        Phone Number
+                        <span>*</span>
+                    </label>
+
+
+                    <div class="phone-row">
+
+                        <select
+                            name="country_code"
+                            id="countryCode"
+                            required
+                        >
+
+                            <option
+                                value="+212"
+                                {% if not form_data or form_data.get('country_code', '+212') == '+212' %}selected{% endif %}
+                            >
+                                🇲🇦 +212
+                            </option>
+
+                            <option
+                                value="+33"
+                                {% if form_data and form_data.get('country_code') == '+33' %}selected{% endif %}
+                            >
+                                🇫🇷 +33
+                            </option>
+
+                            <option
+                                value="+34"
+                                {% if form_data and form_data.get('country_code') == '+34' %}selected{% endif %}
+                            >
+                                🇪🇸 +34
+                            </option>
+
+                            <option
+                                value="+39"
+                                {% if form_data and form_data.get('country_code') == '+39' %}selected{% endif %}
+                            >
+                                🇮🇹 +39
+                            </option>
+
+                            <option
+                                value="+44"
+                                {% if form_data and form_data.get('country_code') == '+44' %}selected{% endif %}
+                            >
+                                🇬🇧 +44
+                            </option>
+
+                            <option
+                                value="+49"
+                                {% if form_data and form_data.get('country_code') == '+49' %}selected{% endif %}
+                            >
+                                🇩🇪 +49
+                            </option>
+
+                            <option
+                                value="+31"
+                                {% if form_data and form_data.get('country_code') == '+31' %}selected{% endif %}
+                            >
+                                🇳🇱 +31
+                            </option>
+
+                            <option
+                                value="+32"
+                                {% if form_data and form_data.get('country_code') == '+32' %}selected{% endif %}
+                            >
+                                🇧🇪 +32
+                            </option>
+
+                            <option
+                                value="+41"
+                                {% if form_data and form_data.get('country_code') == '+41' %}selected{% endif %}
+                            >
+                                🇨🇭 +41
+                            </option>
+
+                            <option
+                                value="+351"
+                                {% if form_data and form_data.get('country_code') == '+351' %}selected{% endif %}
+                            >
+                                🇵🇹 +351
+                            </option>
+
+                            <option
+                                value="+1"
+                                {% if form_data and form_data.get('country_code') == '+1' %}selected{% endif %}
+                            >
+                                🇺🇸 +1
+                            </option>
+
+                            <option
+                                value="+971"
+                                {% if form_data and form_data.get('country_code') == '+971' %}selected{% endif %}
+                            >
+                                🇦🇪 +971
+                            </option>
+
+                            <option
+                                value="+966"
+                                {% if form_data and form_data.get('country_code') == '+966' %}selected{% endif %}
+                            >
+                                🇸🇦 +966
+                            </option>
+
+                            <option
+                                value="+974"
+                                {% if form_data and form_data.get('country_code') == '+974' %}selected{% endif %}
+                            >
+                                🇶🇦 +974
+                            </option>
+
+                            <option
+                                value="+20"
+                                {% if form_data and form_data.get('country_code') == '+20' %}selected{% endif %}
+                            >
+                                🇪🇬 +20
+                            </option>
+
+                            <option
+                                value="+213"
+                                {% if form_data and form_data.get('country_code') == '+213' %}selected{% endif %}
+                            >
+                                🇩🇿 +213
+                            </option>
+
+                            <option
+                                value="+216"
+                                {% if form_data and form_data.get('country_code') == '+216' %}selected{% endif %}
+                            >
+                                🇹🇳 +216
+                            </option>
+
+                            <option
+                                value="+221"
+                                {% if form_data and form_data.get('country_code') == '+221' %}selected{% endif %}
+                            >
+                                🇸🇳 +221
+                            </option>
+
+                            <option
+                                value="+90"
+                                {% if form_data and form_data.get('country_code') == '+90' %}selected{% endif %}
+                            >
+                                🇹🇷 +90
+                            </option>
+
+                        </select>
+
+
+                        <input
+                            type="tel"
+                            name="phone"
+                            id="phone"
+                            placeholder="600000000"
+                            value="{{ form_data.get('phone', '') if form_data else '' }}"
+                            inputmode="numeric"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div
+                        id="phoneError"
+                        class="field-error"
+                        style="display: none;"
+                    ></div>
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group full-width">
+
+                    <label for="email">
+                        Email
+                        <small>Optional</small>
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="example@email.com"
+                        value="{{ form_data.get('email', '') if form_data else '' }}"
+                    >
+
+                </div>
+
+
+
+                <!-- CLIENT STATUS -->
+
+                <div class="form-section">
+
+                    <div class="form-section-heading">
+
+                        <div>
+                            <span class="section-number">
+                                01
+                            </span>
+
+                            <h3>
+                                Client Status
+                            </h3>
+                        </div>
+
+                        <span class="required-text">
+                            Required
+                        </span>
+
+                    </div>
+
+
+                    <div class="choice-grid two-options">
+
+
+                        <label class="choice-card">
+
+                            <input
+                                type="radio"
+                                name="status"
+                                value="Student"
+                                required
+                                {% if form_data and form_data.get('status') == 'Student' %}checked{% endif %}
+                            >
+
+                            <span class="choice-content">
+
+                                <span class="choice-icon">
+                                    🎓
+                                </span>
+
+                                <span>
+
+                                    <strong>
+                                        Student
+                                    </strong>
+
+                                    <small>
+                                        Student pricing
+                                    </small>
+
+                                </span>
+
+                            </span>
+
+                        </label>
+
+
+
+                        <label class="choice-card">
+
+                            <input
+                                type="radio"
+                                name="status"
+                                value="Normal"
+                                required
+                                {% if form_data and form_data.get('status') == 'Normal' %}checked{% endif %}
+                            >
+
+                            <span class="choice-content">
+
+                                <span class="choice-icon">
+                                    💼
+                                </span>
+
+                                <span>
+
+                                    <strong>
+                                        Non-Student
+                                    </strong>
+
+                                    <small>
+                                        Standard pricing
+                                    </small>
+
+                                </span>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TODAY PLAN -->
+
+                <div class="form-section">
+
+                    <div class="form-section-heading">
+
+                        <div>
+
+                            <span class="section-number">
+                                02
+                            </span>
+
+                            <h3>
+                                Today's Plan
+                            </h3>
+
+                        </div>
+
+                        <span class="required-text">
+                            Required
+                        </span>
+
+                    </div>
+
+
+                    <div class="choice-grid two-options">
+
+
+                        <label class="choice-card">
+
+                            <input
+                                type="radio"
+                                name="plan"
+                                value="Half Day"
+                                required
+                                {% if form_data and form_data.get('plan') == 'Half Day' %}checked{% endif %}
+                            >
+
+                            <span class="choice-content">
+
+                                <span class="choice-icon">
+                                    ◐
+                                </span>
+
+                                <span>
+
+                                    <strong>
+                                        Half Day
+                                    </strong>
+
+                                    <small>
+                                        Flexible short visit
+                                    </small>
+
+                                </span>
+
+                            </span>
+
+                        </label>
+
+
+
+                        <label class="choice-card">
+
+                            <input
+                                type="radio"
+                                name="plan"
+                                value="Full Day"
+                                required
+                                {% if form_data and form_data.get('plan') == 'Full Day' %}checked{% endif %}
+                            >
+
+                            <span class="choice-content">
+
+                                <span class="choice-icon">
+                                    ☀
+                                </span>
+
+                                <span>
+
+                                    <strong>
+                                        Full Day
+                                    </strong>
+
+                                    <small>
+                                        Complete workday
+                                    </small>
+
+                                </span>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SUBSCRIPTION -->
+
+                <div class="form-section">
+
+                    <div class="form-section-heading">
+
+                        <div>
+
+                            <span class="section-number">
+                                03
+                            </span>
+
+                            <h3>
+                                Subscription
+                            </h3>
+
+                        </div>
+
+                        <span class="required-text">
+                            Required
+                        </span>
+
+                    </div>
+
+
+                    <div class="choice-grid subscription-options">
+
+
+                        <!-- NONE -->
+
+                        <label class="choice-card subscription-card">
+
+                            <input
+                                type="radio"
+                                name="subscription"
+                                value="None"
+                                required
+                                {% if not form_data or form_data.get('subscription', 'None') == 'None' %}checked{% endif %}
+                            >
+
+                            <span class="choice-content">
+
+                                <span>
+
+                                    <strong>
+                                        No Subscription
+                                    </strong>
+
+                                    <small>
+                                        Pay standard visit price
+                                    </small>
+
+                                </span>
+
+                            </span>
+
+                        </label>
+
+
+                        <!-- WEEKLY -->
+
+                        <label class="choice-card subscription-card">
+
+                            <input
+                                type="radio"
+                                name="subscription"
+                                value="Weekly"
+                                required
+                                {% if form_data and form_data.get('subscription') == 'Weekly' %}checked{% endif %}
+                            >
+
+                            <span class="choice-content">
+
+                                <span>
+
+                                    <strong>
+                                        Weekly
+                                    </strong>
+
+                                    <small>
+                                        7 days
+                                    </small>
+
+                                </span>
+
+
+                                <span class="choice-price">
+                                    50 DH
+                                </span>
+
+                            </span>
+
+                        </label>
+
+
+                        <!-- MONTHLY -->
+
+                        <label class="choice-card subscription-card">
+
+                            <input
+                                type="radio"
+                                name="subscription"
+                                value="Monthly"
+                                required
+                                {% if form_data and form_data.get('subscription') == 'Monthly' %}checked{% endif %}
+                            >
+
+                            <span class="choice-content">
+
+                                <span>
+
+                                    <strong>
+                                        Monthly
+                                    </strong>
+
+                                    <small>
+                                        One calendar month
+                                    </small>
+
+                                </span>
+
+
+                                <span class="choice-price">
+                                    200 DH
+                                </span>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="register-submit"
+                >
+
+                    <span>
+                        Complete Registration
+                    </span>
+
+                    <span class="submit-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+                <p class="register-required-note">
+                    <span>*</span>
+                    Required information
+                </p>
+
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- ======================================================
+     PHONE VALIDATION
+     ====================================================== -->
+
+<script>
+
+    const form =
+        document.getElementById("registrationForm");
+
+    const phoneInput =
+        document.getElementById("phone");
+
+    const countryCode =
+        document.getElementById("countryCode");
+
+    const phoneError =
+        document.getElementById("phoneError");
+
+
+    function cleanPhone(value) {
+
+        return value.replace(/\D/g, "");
+
+    }
+
+
+    function validatePhone() {
+
+        let phone =
+            cleanPhone(phoneInput.value);
+
+        const code =
+            countryCode.value;
+
+
+        if (code === "+212") {
+
+
+            if (
+                phone.length === 10 &&
+                phone.startsWith("0")
+            ) {
+
+                phone =
+                    phone.substring(1);
+
+                phoneInput.value =
+                    phone;
+
+            }
+
+
+            if (phone.length !== 9) {
+
+                phoneError.innerText =
+                    "Please check the phone number. It must contain 9 digits.";
+
+                phoneError.style.display =
+                    "block";
+
+                return false;
+
+            }
+
+
+            if (
+                !["5", "6", "7"].includes(
+                    phone.charAt(0)
+                )
+            ) {
+
+                phoneError.innerText =
+                    "Please enter a valid Moroccan phone number.";
+
+                phoneError.style.display =
+                    "block";
+
+                return false;
+
+            }
+
+        }
+
+        else {
+
+
+            if (
+                phone.length < 6 ||
+                phone.length > 14
+            ) {
+
+                phoneError.innerText =
+                    "Please check the phone number.";
+
+                phoneError.style.display =
+                    "block";
+
+                return false;
+
+            }
+
+        }
+
+
+        phoneError.style.display =
+            "none";
+
+        return true;
+
+    }
+
+
+    countryCode.addEventListener(
+        "change",
+        function () {
+
+            phoneError.style.display =
+                "none";
+
+
+            if (
+                countryCode.value === "+212"
+            ) {
+
+                phoneInput.placeholder =
+                    "600000000";
+
+            }
+
+            else {
+
+                phoneInput.placeholder =
+                    "Phone number";
+
+            }
+
+        }
+    );
+
+
+    phoneInput.addEventListener(
+        "blur",
+        validatePhone
+    );
+
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            if (!validatePhone()) {
+
+                event.preventDefault();
+
+                phoneInput.focus();
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+
+</html>

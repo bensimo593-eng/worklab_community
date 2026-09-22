@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Services | WORKLAB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="services-body">
+<section class="services-page">
+    <div class="services-overlay"></div>
+
+    <div class="services-shell">
+        <a href="{{ url_for('home') }}" class="services-back">← Back to Home</a>
+
+        <div class="services-card">
+            <img src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}"
+                 alt="WORKLAB"
+                 class="services-logo">
+
+            {% if success_items %}
+                <div class="services-success-icon">✓</div>
+                <p class="services-eyebrow">PAYMENT RECORDED</p>
+                <h1>Additional Services Added</h1>
+                <p class="services-subtitle">
+                    {{ client['full_name'] }} · {{ client['client_id'] }}
+                </p>
+
+                <div class="services-receipt">
+                    {% for service_name, price in success_items %}
+                    <div>
+                        <span>{{ service_name }}</span>
+                        <strong>{{ "%.2f"|format(price) }} DH</strong>
+                    </div>
+                    {% endfor %}
+                    <div class="services-total">
+                        <span>Total</span>
+                        <strong>{{ "%.2f"|format(total) }} DH</strong>
+                    </div>
+                </div>
+
+                <div class="services-actions">
+                    <a href="{{ url_for('additional_services') }}" class="services-primary-button">
+                        Add Another Service
+                    </a>
+                    <a href="{{ url_for('home') }}" class="services-secondary-button">
+                        Back to Home
+                    </a>
+                </div>
+
+            {% else %}
+                <p class="services-eyebrow">EXTRAS</p>
+                <h1>Additional Services</h1>
+                <p class="services-subtitle">
+                    Included daily drink/snack is not entered here. Use this page only for extra paid services.
+                </p>
+
+                {% if error %}
+                    <div class="services-error">{{ error }}</div>
+                {% endif %}
+
+                <form method="POST" class="services-form">
+                    <label class="services-client-id">
+                        Client ID
+                        <input
+                            type="text"
+                            name="client_id"
+                            value="{{ entered_client_id or '' }}"
+                            placeholder="WL0001"
+                            maxlength="6"
+                            required
+                            oninput="this.value=this.value.toUpperCase()">
+                    </label>
+
+                    <div class="service-options">
+                        <div class="service-option">
+                            <div class="service-option-text">
+                                <strong>Drink</strong>
+                                <span>Extra paid drink</span>
+                            </div>
+                            <div class="service-price-input">
+                                <input type="number" name="drink_price" min="0.01" step="0.01" placeholder="0.00">
+                                <span>DH</span>
+                            </div>
+                        </div>
+
+                        <div class="service-option">
+                            <div class="service-option-text">
+                                <strong>Snack</strong>
+                                <span>Extra paid snack</span>
+                            </div>
+                            <div class="service-price-input">
+                                <input type="number" name="snack_price" min="0.01" step="0.01" placeholder="0.00">
+                                <span>DH</span>
+                            </div>
+                        </div>
+
+                        <div class="service-option">
+                            <div class="service-option-text">
+                                <strong>PS5</strong>
+                                <span>Gaming service</span>
+                            </div>
+                            <div class="service-price-input">
+                                <input type="number" name="ps5_price" min="0.01" step="0.01" placeholder="0.00">
+                                <span>DH</span>
+                            </div>
+                        </div>
+
+                        <div class="service-option">
+                            <div class="service-option-text">
+                                <strong>Printing</strong>
+                                <span>Printing / impression</span>
+                            </div>
+                            <div class="service-price-input">
+                                <input type="number" name="printing_price" min="0.01" step="0.01" placeholder="0.00">
+                                <span>DH</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="services-primary-button services-submit">
+    Confirm & Add to Revenue
+</button>
+
+</form>
+
+<a href="{{ url_for('home') }}" class="home-button">
+    ← Back to Home
+</a>
+
+{% endif %}
+        </div>
+    </div>
+</section>
+</body>
+</html>

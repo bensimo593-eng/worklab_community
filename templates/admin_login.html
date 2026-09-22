@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORKLAB Staff Access</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="admin-login-body">
+<div class="admin-login-card">
+    <img class="admin-login-logo"
+         src="{{ url_for('static', filename='images/worklab-logo.jpeg') }}"
+         alt="WORKLAB">
+
+    <h1>Staff Access</h1>
+    <p>Private WORKLAB management area</p>
+
+    {% if error %}
+        <div class="register-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" class="admin-form">
+        <label>
+            Username
+            <input type="text" name="username" required autocomplete="username">
+        </label>
+
+        <label>
+            Password
+            <input type="password" name="password" required autocomplete="current-password">
+        </label>
+
+        <button class="admin-button admin-button-primary" type="submit">Sign In</button>
+    </form>
+
+    <a href="{{ url_for('home') }}" class="admin-back-home">← Back to Home</a>
+</div>
+</body>
+</html>
